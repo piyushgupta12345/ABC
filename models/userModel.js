@@ -15,11 +15,26 @@ const userSchema = new Schema({
       type: String,
       required: true
    },
-   role:{
-      type:String,
-      enum:['user', 'admin', 'influencer'],
-      default:'user'
+   role: {
+      type: String,
+      enum: ['user', 'admin', 'company'],
+      default: 'user'
+   },
+   phone: {
+      type: Number
+   },
+   location: {
+      type: String
+   },
+   bio: {
+      type: String
+   },
+   instagram: {
+      type: String
+   },
+   twitter: {
+      type: String
    }
-},{timestamps:true})
+}, { timestamps: true })
 
 export const User = mongoose.model('User', userSchema)

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { signup } from '../../redux/slice/authSlice'
+import { AuthContext } from '../../context/AuthProvider'
+import Cookies from 'js-cookie'
 
 function Signup() {
   // create states
@@ -12,22 +12,35 @@ function Signup() {
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
 
+  // use Context
+  const { auth, setAuth } = useContext(AuthContext)
+
   // use navigate
   const navigate = useNavigate()
 
-  // use dispatch
-  const dispatch = useDispatch()
+  const checkRole = (value) => {
+    console.log(value)
+    setRole(value)
+    // console.log(role)
+  }
+
 
   // user Register function
   const userSignup = async () => {
     try {
-      const response = await axios.post('http://localhost:7645/api/v1/auth/signup', { name, email, password }, { headers: { "Content-Type": 'application/json' } })
+      const response = await axios.post('http://localhost:7645/api/v1/auth/signup', { name, email, password, role }, {
+        headers: { "Content-Type": 'application/json' },
+        withCredentials: true
+      }
+      )
       console.log(response.data)
 
       // destructure response.data
       const { success, message } = response.data
       if (success) {
-        dispatch(signup(response.data))
+        // dispatch(signup(response.data))
+        localStorage.setItem('authUser', JSON.stringify(response.data))
+        setAuth({ ...auth, user: response.data.user, token: Cookies.get('token') })
         toast.success(message)
         navigate('/')
       } else {
@@ -56,7 +69,7 @@ function Signup() {
           {/* Sign In heading */}
           <h1
             className='text-4xl text-white select-none'>
-            SignIn
+            SignUp
           </h1>
 
           {/* Form container */}
@@ -94,14 +107,46 @@ function Signup() {
             />
 
             {/* input role */}
-            <input
+            <div className='text-white flex items-center gap-12'>
+
+              <div className='flex items-center gap-2'>
+
+                <label htmlFor="user">User</label>
+                <input
+                  type="checkbox"
+                  name="role"
+                  id="user"
+                  value={'user'}
+                  checked={role === 'user'}
+                  onChange={(e) => checkRole(e.target.value)}
+                />
+
+              </div>
+
+              <div className='flex items-center gap-2'>
+
+                <label htmlFor="company">Company</label>
+                <input
+                  type="checkbox"
+                  name="role"
+                  id="company"
+                  value={'company'}
+                  checked={role === 'company'}
+                  onChange={(e) => checkRole(e.target.value)}
+                />
+
+              </div>
+
+            </div>
+
+            {/* <input
               type="text"
               placeholder='Enter your role'
               value={role}
               onChange={(e) => setRole(e.target.value)}
               required
               className='rounded-full py-2 px-5 text-xl'
-            />
+            /> */}
 
             {/* Sign In button */}
             <button

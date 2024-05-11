@@ -15,7 +15,12 @@ const PORT = process.env.PORT || 6005
 
 // mi
 app.use(express.json())
-app.use(cors())
+app.use(cors(
+    {
+        origin: 'http://localhost:5173',
+        credentials:true
+    }
+))
 app.use(cookieParser())
 
 // import and mounting authRoutes
@@ -25,6 +30,10 @@ app.use('/api/v1/auth', authRoutes)
 // import and mounting userRoutes
 import userRoutes from './routes/userRoutes.js'
 app.use('/api/v1/user', userRoutes)
+
+// import and mounting userRoutes
+import profileRoutes from './routes/profileRoutes.js'
+app.use('/api/v1/profile', profileRoutes)
 
 // app listen
 app.listen(PORT, () => {

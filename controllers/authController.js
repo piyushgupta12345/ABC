@@ -8,7 +8,7 @@ export const signupController = async (req, res) => {
         const { name, email, password, role } = req.body
 
         // check all field required
-        if (!name || !email || !password) {
+        if (!name || !email || !password ) {
             return res.status(200).json({
                 success: false,
                 message: 'All field required'
@@ -41,7 +41,7 @@ export const signupController = async (req, res) => {
         // generate token
         const token = await generateToken(user)
 
-        res.status(201).cookie('token', token, { httpOnly: true }).json({
+        res.status(201).cookie('token', token, { httpOnly: false }).json({
             success: true,
             message: 'User register successfully',
             user
@@ -99,7 +99,7 @@ export const signinController = async (req, res) => {
         const token = await generateToken(user)
         console.log(user)
 
-        res.status(200).cookie('token', token, { httpOnly: true }).json({
+        res.status(200).cookie('token', token,{httpOnly: false}).json({
             success: true,
             message: 'User login successfully',
             user
@@ -116,7 +116,7 @@ export const signinController = async (req, res) => {
 // User Logout
 export const logoutController = (req, res) => {
     try {
-        return res.status(200).cookie('token', '', { maxAge:0, httpOnly: true }).json({
+        return res.status(200).cookie('token', '', { maxAge:0, httpOnly: false }).json({
             success: true,
             message: 'User logout successfully'
         })

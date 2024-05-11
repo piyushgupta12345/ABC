@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { signin } from '../../redux/slice/authSlice'
+// import { useDispatch } from 'react-redux'
+// import { signin } from '../../redux/slice/authSlice'
+import { AuthContext } from '../../context/AuthProvider'
+import Cookies from 'js-cookie'
 
 function Signin() {
 
@@ -11,23 +13,28 @@ function Signin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  // use Context
+  const{auth,setAuth} = useContext(AuthContext)
+
   // use navigate
   const navigate = useNavigate()
 
   // use dispatch
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
 
   // user Login function
   const userSignin = async () => {
     try {
-      const response = await axios.post('http://localhost:7645/api/v1/auth/signin', { email, password }, { headers: { "Content-Type": 'application/json' } })
+      const response = await axios.post('http://localhost:7645/api/v1/auth/signin', { email, password }, { headers: { "Content-Type": 'application/json' },withCredentials:true })
       console.log(response.data)
 
       // destructure response.data
       const { success, message } = response.data
       if (success) {
-        dispatch(signin(response.data))
+        // dispatch(signin(response.data))
+        localStorage.setItem('authUser', JSON.stringify(response.data))
+        setAuth({...auth, user: response.data.user, token: Cookies.get('token')})
         toast.success(message)
         navigate('/')
       } else {

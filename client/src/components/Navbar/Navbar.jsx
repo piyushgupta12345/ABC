@@ -1,19 +1,37 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { IoIosSearch } from "react-icons/io";
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaBars } from "react-icons/fa6";
 import { RxCross1 } from "react-icons/rx";
+import SearchBar from '../SearchBar/SearchBar';
+import { AuthContext } from '../../context/AuthProvider';
+import { toast } from 'react-hot-toast'
+import axios from 'axios'
+
 
 function Navbar() {
-    const [search, setSearch] = useState('')
     const [menu, setMenu] = useState(true)
+
+    const { auth, setAuth } = useContext(AuthContext)
+
+    // use navigate
+    const navigate = useNavigate()
+
+    // const logoutHandler = () => {
+    //     localStorage.removeItem('authUser')
+    //     setAuth({ ...auth, user: null })
+    //     navigate('/signin')
+    //     toast.success("Logout Successfully")
+    // }
+
+    const logoutHandler = async () => {
+        const res = await axios.get('http://localhost:7645/api/v1/auth/logout', { headers: { "Content-Type": 'application/json' }, withCredentials: true })
+        localStorage.removeItem('authUser')
+        setAuth({ ...auth, user: null })
+        console.log(res.data.message)
+    }
 
     function abc() {
         setMenu(!menu)
-    }
-
-    function a(e) {
-        setSearch(console.log(e.target.value))
     }
 
     <header className=' bg-black text-white'>
@@ -27,18 +45,7 @@ function Navbar() {
             </div>
 
             {/* search bar */}
-            <div className="serachBar flex items-center justify-center">
-                <input
-                    type="search"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder='Search now'
-                    className=' py-2 px-5 rounded-full w-[300px] text-green-400 outline-0 placeholder:text-red-600'
-                />
-                <IoIosSearch
-                    className='text-[25px]'
-                />
-            </div>
+            <SearchBar />
 
             {/* links */}
             <ul className='flex justify-between items-center gap-5'>
@@ -68,6 +75,7 @@ function Navbar() {
         </nav>
 
     </header>
+
     return (
         <>
             {/* header */}
@@ -82,18 +90,7 @@ function Navbar() {
                     </div>
 
                     {/* search bar */}
-                    <div className="serachBar flex items-center justify-center">
-                        <input
-                            type="search"
-                            value={search}
-                            onChange={a}
-                            placeholder='Search now'
-                            className=' py-2 px-5 rounded-full w-[300px] max-[500px]:w-[220px] text-green-400 outline-0 placeholder:text-red-600'
-                        />
-                        {/* <IoIosSearch
-                            className='text-[25px]'
-                        /> */}
-                    </div>
+                    <SearchBar />
 
                     {/* links */}
                     {menu ? <FaBars className=' cursor-pointer text-[30px]' onClick={abc} /> :
@@ -118,17 +115,73 @@ function Navbar() {
                     <Link to={'/about'}>About</Link>
                 </li>
 
-                {/* service link */}
-                <li className=' hover:text-sky-700 ease-in duration-500'>
-                    <Link to={'/service'}>Service</Link>
-                </li>
+                {auth.user?.role ?
+                    <>
+                        {/* Logout link */}
+                        <li className=' hover:text-sky-700 ease-in duration-500'>
+                            <button onClick={logoutHandler}>Logout</button>
+                        </li>
+
+                        {auth?.user?.role === 'user' ?
+                            <>
+                                {/* user link */}
+                                <li className=' hover:text-sky-700 ease-in duration-500'>
+                                    <Link to={'user'}>User</Link>
+                                </li>
+
+                                {/* profile link */}
+                                <li className=' hover:text-sky-700 ease-in duration-500'>
+                                    <Link to={'user/profile'}>Profile</Link>
+                                </li>
+                            </>
+                            :
+                            <>
+                                {auth?.user?.role === 'company' ?
+                                    <>
+                                        {/* company link */}
+                                        <li className=' hover:text-sky-700 ease-in duration-500'>
+                                            <Link to={'/company'}>Company</Link>
+                                        </li>
+                                    </>
+                                    :
+                                    <>
+                                        {/* company link */}
+                                        <li className=' hover:text-sky-700 ease-in duration-500'>
+                                            <Link to={'/admin'}>Admin</Link>
+                                        </li>
+                                    </>
+                                }
+
+                            </>
+                        }
+                    </>
+                    :
+                    <>
+                        {/* Sign Up link */}
+                        <li className=' hover:text-sky-700 ease-in duration-500'>
+                            <Link to={'/signup'}>SignUP</Link>
+                        </li>
+
+                        {/* Sign In link */}
+                        <li className=' hover:text-sky-700 ease-in duration-500'>
+                            <Link to={'/signin'}>SignIn</Link>
+                        </li>
+
+                        {/* service link */}
+                        <li className=' hover:text-sky-700 ease-in duration-500'>
+                            <Link to={'/service'}>Service</Link>
+                        </li>
+                    </>
+                }
+
+
 
                 {/* contact link */}
                 <li className=' hover:text-sky-700 ease-in duration-500 pb-5'>
                     <Link to={'/contact'}>Contact</Link>
                 </li>
 
-            </ul>}
+            </ul >}
 
         </>
     )

@@ -1,64 +1,67 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../../context/AuthProvider'
 
 function CollabCard() {
+
+    const { searchItem } = useContext(AuthContext)
 
     const collaborations = [
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC',
+            companyName: 'Airtel',
             date: '2023-02-15'
         },
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC',
+            companyName: 'Vodafon',
             date: '2023-02-15'
         },
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC',
+            companyName: 'Jio',
             date: '2023-02-15'
         },
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC'
+            companyName: 'Dabur'
         },
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC',
+            companyName: 'Colget',
             date: '2023-02-15'
         },
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC',
+            companyName: 'Vivo',
             date: '2023-02-15'
         },
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC',
+            companyName: 'Realme',
             date: '2023-02-15'
         },
         {
             companyImage: 'https://img.freepik.com/free-photo/influencer-posting-social-media_23-2149194122.jpg',
             influencerName: 'Influencer 1',
-            companyName: 'ABC',
+            companyName: 'Hero',
             date: '2023-02-15'
         }
     ];
 
     return (
         <>
-            <main className=' flex items-center justify-center flex-wrap px-5'>
+            <main className=' flex items-center justify-center flex-col px-5'>
                 <h1 className='text-[50px] max-[768px]:text-[32px] font-bold py-10 text-center'>collaborations </h1>
 
                 <section className=' flex items-center justify-center flex-wrap gap-6 '>
-                    {collaborations.map((el, i) =>
+                    {collaborations.filter(e => e.companyName.toLowerCase().includes(searchItem)).map((el, i) =>
                     (
                         <div
                             key={i}

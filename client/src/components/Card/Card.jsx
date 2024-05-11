@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../../context/AuthProvider'
 
 function Card() {
+
+    const { searchItem } = useContext(AuthContext)
 
     const influencer = [
         { name: 'Ajay', followers: 100000, engagementRate: 2.5 },
@@ -23,7 +26,7 @@ function Card() {
                 <h1 className='text-[50px] select-none max-[768px]:text-[32px] font-bold py-10 text-center'>Top 12 Influencers<span className='max-[500px]:hidden'>/Celebrities</span></h1>
 
                 <section className=' flex items-center justify-center flex-wrap gap-6 '>
-                    {influencer.map((el, i) =>
+                    {influencer.filter(e => e.name.toLowerCase().includes(searchItem)).map((el, i) =>
                     (
                         <div
                             key={i}
