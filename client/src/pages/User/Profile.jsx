@@ -23,11 +23,13 @@ function Profile() {
     setFullName(name)
     setEmail(email)
     setPassword(password)
-    console.log(name)
   }
 
-  const updateProfile = async (id) => {
+  const id = auth.user._id
+
+  const updateProfile = async () => {
     try {
+      console.log(id)
       const res = await axios.put(`http://localhost:7645/api/v1/user/updateuser/${id}`, { fullName, email, password, phone, location, bio, instagram, twitter }, { headers: { "Content-Type": 'application/json' }, withCredentials: true })
       console.log(res.data)
     } catch (error) {

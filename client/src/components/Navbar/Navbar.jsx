@@ -27,7 +27,6 @@ function Navbar() {
         const res = await axios.get('http://localhost:7645/api/v1/auth/logout', { headers: { "Content-Type": 'application/json' }, withCredentials: true })
         localStorage.removeItem('authUser')
         setAuth({ ...auth, user: null })
-        console.log(res.data.message)
     }
 
     function abc() {

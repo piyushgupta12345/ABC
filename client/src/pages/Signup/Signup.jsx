@@ -4,6 +4,8 @@ import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthProvider'
 import Cookies from 'js-cookie'
+import { BiSolidShow } from "react-icons/bi";
+import { BiSolidHide } from "react-icons/bi";
 
 function Signup() {
   // create states
@@ -11,6 +13,12 @@ function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
+  // password hide and show state
+  const [showPassword, setShowPassword] = useState(true)
+
+  const hideShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
 
   // use Context
   const { auth, setAuth } = useContext(AuthContext)
@@ -97,14 +105,31 @@ function Signup() {
             />
 
             {/* input password */}
-            <input
-              type="password"
-              placeholder='Enter your password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className='rounded-full py-2 px-5 text-xl'
-            />
+            <div className=' '>
+
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder='Enter your password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className='rounded-full py-2 px-5 text-xl'
+              />
+
+              {
+                showPassword ?
+                  <BiSolidShow
+                    onClick={hideShowPassword}
+                    className='bg-white cursor-pointer relative bottom-7 left-60'
+                  />
+                  :
+                  <BiSolidHide
+                    onClick={hideShowPassword}
+                    className='bg-white cursor-pointer relative bottom-7 left-60'
+                  />
+              }
+
+            </div>
 
             {/* input role */}
             <div className='text-white flex items-center gap-12'>

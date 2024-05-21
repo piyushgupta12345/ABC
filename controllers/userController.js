@@ -42,10 +42,10 @@ export const getAllUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         // data fetch from frontend
-        const { name, email, password, phone, bio } = req.body
+        const { name, email, password,  phone, location, bio, instagram, twitter } = req.body
 
         // update user
-        const updateUser = await User.findByIdAndUpdate(req.user.id, { name, email, password, phone, bio }, { new: true })
+        const updateUser = await User.findByIdAndUpdate(req.user.id, { name, email, password, phone, location, bio, instagram, twitter }, { new: true })
         res.status(200).json({
             success: true,
             message: 'User update successfully',

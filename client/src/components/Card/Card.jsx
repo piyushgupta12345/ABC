@@ -22,7 +22,7 @@ function Card() {
 
     return (
         <>
-            <main className=' flex items-center justify-center flex-wrap px-5'>
+            <main className=' flex items-center justify-center flex-col px-5'>
                 <h1 className='text-[50px] select-none max-[768px]:text-[32px] font-bold py-10 text-center'>Top 12 Influencers<span className='max-[500px]:hidden'>/Celebrities</span></h1>
 
                 <section className=' flex items-center justify-center flex-wrap gap-6 '>

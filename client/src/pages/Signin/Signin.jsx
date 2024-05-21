@@ -2,31 +2,34 @@ import React, { useContext, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-// import { useDispatch } from 'react-redux'
-// import { signin } from '../../redux/slice/authSlice'
 import { AuthContext } from '../../context/AuthProvider'
 import Cookies from 'js-cookie'
+import { BiSolidShow } from "react-icons/bi";
+import { BiSolidHide } from "react-icons/bi";
 
 function Signin() {
 
   // create states
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  // password hide and show state
+  const [showPassword, setShowPassword] = useState(true)
+
+  const hideShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
 
   // use Context
-  const{auth,setAuth} = useContext(AuthContext)
+  const { auth, setAuth } = useContext(AuthContext)
 
   // use navigate
   const navigate = useNavigate()
-
-  // use dispatch
-  // const dispatch = useDispatch()
 
 
   // user Login function
   const userSignin = async () => {
     try {
-      const response = await axios.post('http://localhost:7645/api/v1/auth/signin', { email, password }, { headers: { "Content-Type": 'application/json' },withCredentials:true })
+      const response = await axios.post('http://localhost:7645/api/v1/auth/signin', { email, password }, { headers: { "Content-Type": 'application/json' }, withCredentials: true })
       console.log(response.data)
 
       // destructure response.data
@@ -34,7 +37,7 @@ function Signin() {
       if (success) {
         // dispatch(signin(response.data))
         localStorage.setItem('authUser', JSON.stringify(response.data))
-        setAuth({...auth, user: response.data.user, token: Cookies.get('token')})
+        setAuth({ ...auth, user: response.data.user, token: Cookies.get('token') })
         toast.success(message)
         navigate('/')
       } else {
@@ -79,14 +82,32 @@ function Signin() {
             />
 
             {/* input password */}
-            <input
-              type="password"
-              placeholder='Enter your password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className='rounded-full py-2 px-5 text-xl'
-            />
+            <div className=' '>
+
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder='Enter your password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className='rounded-full py-2 px-5 text-xl'
+              />
+
+              {
+                showPassword ?
+                  <BiSolidShow
+                    onClick={hideShowPassword}
+                    className='bg-white cursor-pointer relative bottom-7 left-60'
+                  />
+                  :
+                  <BiSolidHide
+                    onClick={hideShowPassword}
+                    className='bg-white cursor-pointer relative bottom-7 left-60'
+                  />
+              }
+
+            </div>
+
 
             {/* Sign Up button */}
             <button

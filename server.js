@@ -31,9 +31,13 @@ app.use('/api/v1/auth', authRoutes)
 import userRoutes from './routes/userRoutes.js'
 app.use('/api/v1/user', userRoutes)
 
-// import and mounting userRoutes
+// import and mounting profileRoutes
 import profileRoutes from './routes/profileRoutes.js'
 app.use('/api/v1/profile', profileRoutes)
+
+// import and mounting companyAdvertisementuserRoutes
+import companyAdvertisementRoutes from './routes/companyAdvertisementRoutes.js'
+app.use('/api/v1/company', companyAdvertisementRoutes)
 
 // app listen
 app.listen(PORT, () => {
